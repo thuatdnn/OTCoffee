@@ -1,0 +1,33 @@
+{
+  "name": "Order",
+  "plural": "orders",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "Timestamp": true
+  },
+  "properties": {
+    "quantity": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "FB": {
+      "type": "belongsTo",
+      "model": "FB",
+      "foreignKey": "FBId"
+    },
+    "transaction": {
+      "type": "belongsTo",
+      "model": "Transaction",
+      "foreignKey": "transactionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

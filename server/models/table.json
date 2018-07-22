@@ -1,0 +1,72 @@
+{
+  "name": "Table",
+  "plural": "tables",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "Timestamp": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "staff",
+      "permission": "ALLOW",
+      "properties": [
+        "updateStatus"
+      ]
+    }
+  ],
+  "methods": {
+    "prototype.updateStatus": {
+      "accepts": [
+        {
+          "arg": "status",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "root": true
+      },
+      "description": "Update status of a table.",
+      "http": {
+        "path": "/update-status",
+        "verb": "PUT"
+      }
+    }
+  }
+}

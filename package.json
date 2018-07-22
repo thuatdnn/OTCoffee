@@ -1,21 +1,41 @@
 {
-  "name": "otcoffee",
+  "name": "OTCofffee",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./server.js"
+  "main": "server/server.js",
+  "engines": {
+    "node": ">=4"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "NODE_ENV=production node .",
+    "dev": "nodemon --exec cross-env NODE_ENV=development node .",
+    "posttest": "npm run lint && nsp check"
+  },
   "dependencies": {
-    "bcrypt": "^3.0.0",
-    "cors": "^2.8.4",
-    "express": "^4.16.3",
-    "express-validator": "^5.2.0",
-    "http": "0.0.0",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "cross-env": "^5.2.0",
+    "dotenv": "^6.0.0",
+    "helmet": "^3.10.0",
     "jsonwebtoken": "^8.3.0",
-    "mongoose": "^5.2.4"
-  }
+    "loopback": "^3.19.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^6.0.0",
+    "loopback-component-storage": "^3.5.0",
+    "loopback-connector-mongodb": "^3.4.4",
+    "nodemon": "^1.18.3",
+    "serve-favicon": "^2.0.1",
+    "strong-error-handler": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-loopback": "^8.0.0",
+    "nsp": "^2.1.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "OTCofffee"
 }

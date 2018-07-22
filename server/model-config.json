@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "AccessToken": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongodb",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "Users": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Category": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "FB": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Table": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Transaction": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Order": {
+    "dataSource": "mongodb",
+    "public": true
+  }
+}

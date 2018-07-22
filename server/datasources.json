@@ -1,0 +1,11 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongodb": {
+    "url": "mongodb://user:passw0rd@ds121321.mlab.com:21321/bapticket",
+    "name": "mongodb",
+    "connector": "mongodb"
+  }
+}
