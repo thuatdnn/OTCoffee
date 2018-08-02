@@ -4,9 +4,6 @@ import 'toastr/build/toastr.css';
 import { API_URL, TOKEN_INVALID_CODE } from '../constants';
 import { User } from './user';
 
-Toastr.options.progressBar = true;
-Toastr.options.positionClass = 'toast-bottom-right';
-
 const request = axios.create({
   baseURL: API_URL,
   timeout: 10000,
@@ -28,7 +25,6 @@ function handleError(response) {
   const error = response.response.data.error;
   Toastr.error(error.message, 'An Error Occurred!');
   if (error.status === 401 && error.code === TOKEN_INVALID_CODE) {
-    window.sessionStorage.setItem('lastPath', window.location.pathname);
     window.location.href = '/login';
   }
   throw error;

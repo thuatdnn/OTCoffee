@@ -9,7 +9,8 @@ import { User } from '../../utils/user';
 import * as TransactionServices from '../../services/TransactionServices.js';
 
 const initialTransaction = {
-  staffId: User.getCurrent().id,
+  staffId: (User.role() !== "customer") && User.getCurrent().id,
+  customerId: (User.role() == "customer") && User.getCurrent().id,
   tranCode: randomstring.generate({ length: 6, charset: 'alphanumeric', capitalization: 'uppercase' }),
 }
 
@@ -145,13 +146,21 @@ class Transaction extends Component {
                               }
                             </td>
                             <td>
-                              <Button onClick={() => this.decreaseProduct(product.id)}>
-                                -
-                              </Button>
-                              <input value={orders[product.id] ? orders[product.id].quantity : 0} type="number" style={{width: 32, height: 35}} />
-                              <Button onClick={() => this.increaseProduct(product.id)}>
-                                +
-                              </Button>
+                              {
+                                product.available && [
+                                  <Button onClick={() => this.decreaseProduct(product.id)}>
+                                    -
+                                  </Button>,
+                                  <input
+                                    value={orders[product.id] ? orders[product.id].quantity : 0}
+                                    type="number"
+                                    style={{width: 32, height: 35}}
+                                  />,
+                                  <Button onClick={() => this.increaseProduct(product.id)}>
+                                    +
+                                  </Button>
+                                ]
+                              }
                             </td>
                           </tr>
                         )}

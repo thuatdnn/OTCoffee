@@ -1,16 +1,11 @@
 'use strict';
 
 module.exports = function(Users) {
-  Users.disableRemoteMethodByName('upsert');
   Users.disableRemoteMethodByName('updateAll');
   Users.disableRemoteMethodByName('deleteById');
   Users.disableRemoteMethodByName('confirm');
   Users.disableRemoteMethodByName('exists');
-  Users.disableRemoteMethodByName('resetPassword');
   Users.disableRemoteMethodByName('findOne');
-  Users.disableRemoteMethodByName('replaceById');
-  Users.disableRemoteMethodByName('replaceOrCreate');
-  Users.disableRemoteMethodByName('setPassword');
   Users.disableRemoteMethodByName('upsertWithWhere');
   Users.disableRemoteMethodByName('createChangeStream');
   Users.disableRemoteMethodByName('prototype.verify');

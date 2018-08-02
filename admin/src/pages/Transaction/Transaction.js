@@ -5,6 +5,8 @@ import {
   Row, Table, ListGroup, ListGroupItem, Badge
 } from 'reactstrap';
 import Swal from 'sweetalert2';
+import { socketConnect } from 'socket.io-react';
+import { User } from '../../utils/user';
 import * as TransactionServices from '../../services/TransactionServices.js';
 
 const transactionStatus = {
@@ -31,14 +33,31 @@ class Transaction extends Component {
       modalTransaction: false,
       editingTransaction: initialTransaction,
       collapse: {},
+      isCustomer: User.role() == "customer",
+      user: User.getCurrent(),
     };
     this.getTransactions = this.getTransactions.bind(this);
   }
 
   getTransactions = async () => {
     try {
-      const { collapse } = this.state;
-      const transactions = await TransactionServices.getTransactions();
+      const { collapse, isCustomer, user } = this.state;
+
+      const filter = {
+        where: {
+          softDelete: false,
+        },
+        include: [{
+          relation: 'orders',
+          scope: {
+            include: 'product'
+          }
+        }], 
+        transaction: 'createdAt ASC' 
+      };
+      if(isCustomer) filter.where.customerId = user.id;
+
+      const transactions = await TransactionServices.getTransactions(filter);
       transactions.map(transaction => {
         const { orders } = transaction;
         transaction.price = 0;
@@ -54,19 +73,24 @@ class Transaction extends Component {
   }
 
   componentDidMount() {
+    const { user } = this.state;
+    const { socket } = this.props;
+    socket.on('new-transaction', data => {
+      this.getTransactions();
+    })
+    
+    socket.on((user.id + '/track-transaction'), data => {
+      this.getTransactions();
+    })
     this.getTransactions();
   }
 
   updateStatusTransaction = async (e, transaction, status) => {
     e.preventDefault();
     try {
-      const result = await TransactionServices.updateTransaction(
+      const result = await TransactionServices.updateTransactionStatus(
         transaction.id,
-        Object.assign(
-          {},
-          transaction,
-          { status: status }
-        )
+        status
       );
       if(result) this.getTransactions();
     } catch(error) {
@@ -152,7 +176,7 @@ class Transaction extends Component {
 
   render() {
     const {
-      transactions, error, loading, collapse,
+      transactions, error, loading, collapse, isCustomer
     } = this.state;
     return (
       <div className="animated fadeIn">
@@ -181,7 +205,6 @@ class Transaction extends Component {
                       <th scope="col">Customer</th>
                       <th scope="col">Staff</th>
                       <th scope="col">Status</th>
-                      <th />
                     </tr>
                   </thead>
                   {transactions.map((transaction, index) =>
@@ -195,7 +218,7 @@ class Transaction extends Component {
                           {this.renderStatus(transaction.status)}
                         </td>
                         <td>
-                          {this.renderButtonUpdateStatus(transaction)}
+                          {!isCustomer && this.renderButtonUpdateStatus(transaction)}
                           {/* <Button className="btn-primary text-white mr-1" size="sm" onClick={(e) => this.toggleModalTransaction(e, transaction)}>
                             <i className="icons icon-pencil"/>
                           </Button> */}
@@ -238,4 +261,4 @@ class Transaction extends Component {
   }
 }
 
-export default Transaction;
+export default socketConnect(Transaction);

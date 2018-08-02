@@ -8,4 +8,7 @@ module.exports = {
     err.data = data;
     return err;
   },
+  generateRoom: (data) => {
+    return 'room/' + data.type + '/' + data.id;
+  }
 };

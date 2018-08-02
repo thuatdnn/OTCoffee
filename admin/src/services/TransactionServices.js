@@ -23,21 +23,7 @@ export const getCategories = async () => {
   return result;
 };
 
-export const getTransactions = async () => {
-  const filter = {
-    where: {
-      softDelete: false,
-    },
-    include: [{
-      relation: 'orders',
-      scope: {
-        include: 'product'
-      }
-    },{
-      relation: 'staff'
-    }], 
-    transaction: 'createdAt ASC' 
-  };
+export const getTransactions = async (filter) => {
   const result = await Request.get(ENDPOINT_TRANSACTIONS, { filter }, true);
   return result;
 };
@@ -52,6 +38,11 @@ export const getTransaction = async (transactionId) => {
 
 export const updateTransaction = async (transactionId, data) => {
   const result = await Request.put(`${ENDPOINT_TRANSACTIONS}/${transactionId}`, data, true);
+  return result;
+};
+
+export const updateTransactionStatus = async (transactionId, status) => {
+  const result = await Request.put(`${ENDPOINT_TRANSACTIONS}/${transactionId}/status`, { status }, true);
   return result;
 };
 

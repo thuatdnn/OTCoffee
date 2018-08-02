@@ -36,6 +36,8 @@
     "react-test-renderer": "^16.4.1",
     "reactstrap": "^6.3.1",
     "simple-line-icons": "^2.4.1",
+    "socket.io-client": "^2.1.1",
+    "socket.io-react": "^1.2.0",
     "sweetalert2": "^7.26.9",
     "toastr": "^2.1.4",
     "universal-cookie": "^2.2.0"

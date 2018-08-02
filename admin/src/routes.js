@@ -1,7 +1,7 @@
 import React from 'react';
 import Loadable from 'react-loadable'
 
-import DefaultLayout from './containers/DefaultLayout';
+import { DefaultLayout, CustomerLayout } from './containers';
 
 function Loading() {
   return <div>Loading...</div>;
@@ -35,13 +35,12 @@ const Staff = Loadable({
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: '/admin', exact: true, name: 'Home', component: DefaultLayout },
-  { path: '/admin/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/admin/table', name: 'Table', component: Table },
-  { path: '/admin/product', name: 'Product', component: Product },
-  { path: '/admin/transaction', name: 'Transaction', component: Transaction },
-  { path: '/admin/add-transaction', name: 'Add Transaction', component: AddTransaction },
-  { path: '/admin/staff', name: 'Staff', component: Staff },
+  { path: '/', exact: true, name: 'Home', component: DefaultLayout },
+  { path: '/table', name: 'Table', component: Table },
+  { path: '/product', name: 'Product', component: Product },
+  { path: '/transaction', name: 'Transaction', component: Transaction },
+  { path: '/add-transaction', name: 'Add Transaction', component: AddTransaction },
+  { path: '/staff', name: 'Staff', component: Staff },
 ];
 
 export default routes;

@@ -54,11 +54,10 @@ class Login extends Component {
       const user = await login(credentials);
       if(user) {
         User.store(user);
-        const lastPath = window.sessionStorage.getItem('lastPath');
-        if(user.role == "customer") {
-          window.location.href = lastPath || '/';
+        if(user.role === "admin" || user.role === "staff") {
+          window.location.href = '/admin/dashboard';
         };
-        window.location.href = lastPath || '/admin/dashboard';
+        window.location.href = '/';
       }
     } catch (e) {
       console.log(e)

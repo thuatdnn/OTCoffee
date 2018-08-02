@@ -4,30 +4,25 @@ const role = User.role();
 const nav = {
   items: [
     {
-      name: 'Dashboard',
-      url: '/admin/dashboard',
-      icon: 'icon-speedometer',
-    },
-    {
-      name: 'Table',
-      url: '/admin/table',
-      icon: 'icon-grid',
-    },
-    {
-      name: 'Product',
-      url: '/admin/product',
-      icon: 'icon-cup',
-    },
-    {
       name: 'Transaction',
-      url: '/admin/transaction',
+      url: '/transaction',
       icon: 'icon-list',
     },
   ]
 }
+if(role == "admin" || role == "staff") nav.items.push({
+  name: 'Table',
+  url: '/table',
+  icon: 'icon-grid',
+},
+{
+  name: 'Product',
+  url: '/product',
+  icon: 'icon-cup',
+})
 if(role == "admin") nav.items.push({
   name: 'Staff',
-  url: '/admin/staff',
+  url: '/staff',
   icon: 'icon-people',
 })
 

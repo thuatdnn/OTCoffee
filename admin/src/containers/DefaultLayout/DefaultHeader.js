@@ -18,6 +18,13 @@ class DefaultHeader extends Component {
   state = {
     user: User.getCurrent() || {},
   }
+
+  componentDidMount() {
+    if(!User.getCurrent()) {
+      window.location.href = "/login";
+    }
+  }
+
   async handleLogout() {
     await logout();
     User.remove();
@@ -42,7 +49,11 @@ class DefaultHeader extends Component {
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
               <span>{this.state.user.name}</span>
-              <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img
+                src={'https://banner2.kisspng.com/20180326/lke/kisspng-web-development-computer-icons-avatar-business-use-profile-5ab94da7695485.6343143015220934794314.jpg'}
+                className="img-avatar"
+                alt="admin@bootstrapmaster.com"
+              />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem onClick={this.handleLogout.bind(this)}><i className="fa fa-lock"></i> Logout</DropdownItem>
