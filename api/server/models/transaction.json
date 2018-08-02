@@ -11,8 +11,15 @@
   },
   "properties": {
     "status": {
-      "type": "string",
-      "required": true
+      "type": "number",
+      "default": 0
+    },
+    "tranCode": {
+      "type": "string"
+    },
+    "softDelete": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

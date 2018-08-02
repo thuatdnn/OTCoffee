@@ -14,8 +14,13 @@
       "type": "string",
       "required": true
     },
-    "status": {
-      "type": "string"
+    "available": {
+      "type": "boolean",
+      "default": true
+    },
+    "softDelete": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

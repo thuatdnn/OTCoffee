@@ -1,6 +1,6 @@
 {
-  "name": "FB",
-  "plural": "fb",
+  "name": "Product",
+  "plural": "products",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -22,12 +22,17 @@
       "required": true
     },
     "available": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": true
     },
     "images": {
       "type": [
         "string"
       ]
+    },
+    "softDelete": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

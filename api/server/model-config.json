@@ -44,7 +44,7 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "FB": {
+  "Product": {
     "dataSource": "mongodb",
     "public": true
   },

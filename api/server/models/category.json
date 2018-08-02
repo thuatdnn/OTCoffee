@@ -13,13 +13,17 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "softDelete": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],
   "relations": {
-    "FBs": {
+    "products": {
       "type": "hasMany",
-      "model": "FB",
+      "model": "Product",
       "foreignKey": "categoryId"
     }
   },

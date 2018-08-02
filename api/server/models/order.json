@@ -17,10 +17,10 @@
   },
   "validations": [],
   "relations": {
-    "FB": {
+    "product": {
       "type": "belongsTo",
-      "model": "FB",
-      "foreignKey": "FBId"
+      "model": "Product",
+      "foreignKey": "productId"
     },
     "transaction": {
       "type": "belongsTo",
