@@ -19,7 +19,7 @@ export const getCategories = async () => {
     }, 
     transaction: 'createdAt ASC' 
   };
-  const result = await Request.get(ENDPOINT_CATEGORIES, { filter });
+  const result = await Request.get(ENDPOINT_CATEGORIES, { filter }, true);
   return result;
 };
 
@@ -38,7 +38,7 @@ export const getTransactions = async () => {
     }], 
     transaction: 'createdAt ASC' 
   };
-  const result = await Request.get(ENDPOINT_TRANSACTIONS, { filter });
+  const result = await Request.get(ENDPOINT_TRANSACTIONS, { filter }, true);
   return result;
 };
 
@@ -51,16 +51,21 @@ export const getTransaction = async (transactionId) => {
 };
 
 export const updateTransaction = async (transactionId, data) => {
-  const result = await Request.put(`${ENDPOINT_TRANSACTIONS}/${transactionId}`, data);
+  const result = await Request.put(`${ENDPOINT_TRANSACTIONS}/${transactionId}`, data, true);
   return result;
 };
 
 export const addTransaction = async (data) => {
-  const result = await Request.post(ENDPOINT_TRANSACTIONS, data);
+  const result = await Request.post(ENDPOINT_TRANSACTIONS, data, true);
   return result;
 };
 
 export const linkOrder = async (transactionId, data) => {
-  const result = await Request.post(`${ENDPOINT_TRANSACTIONS}/${transactionId}/orders/`, data);
+  const result = await Request.post(`${ENDPOINT_TRANSACTIONS}/${transactionId}/orders/`, data, true);
+  return result;
+};
+
+export const deleteTransaction = async (data) => {
+  const result = await Request.put(`${ENDPOINT_TRANSACTIONS}/${data.id}`, Object.assign({}, data, { softDelete: true }));
   return result;
 };

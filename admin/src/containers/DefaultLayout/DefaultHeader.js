@@ -15,7 +15,9 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
-
+  state = {
+    user: User.getCurrent() || {},
+  }
   async handleLogout() {
     await logout();
     User.remove();
@@ -36,20 +38,10 @@ class DefaultHeader extends Component {
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
 
-        <Nav className="d-md-down-none" navbar>
-          <NavItem className="px-3">
-            <NavLink href="/">Dashboard</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#/users">Users</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Settings</NavLink>
-          </NavItem>
-        </Nav>
         <Nav className="ml-auto" navbar>
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
+              <span>{this.state.user.name}</span>
               <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>

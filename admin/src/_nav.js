@@ -1,24 +1,34 @@
-export default {
+import { User } from './utils/user';
+
+const role = User.role();
+const nav = {
   items: [
     {
       name: 'Dashboard',
-      url: '/dashboard',
+      url: '/admin/dashboard',
       icon: 'icon-speedometer',
     },
     {
       name: 'Table',
-      url: '/table',
+      url: '/admin/table',
       icon: 'icon-grid',
     },
     {
       name: 'Product',
-      url: '/product',
+      url: '/admin/product',
       icon: 'icon-cup',
     },
     {
       name: 'Transaction',
-      url: '/transaction',
+      url: '/admin/transaction',
       icon: 'icon-list',
     },
   ]
-};
+}
+if(role == "admin") nav.items.push({
+  name: 'Staff',
+  url: '/admin/staff',
+  icon: 'icon-people',
+})
+
+export default nav;

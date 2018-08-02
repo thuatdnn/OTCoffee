@@ -19,7 +19,6 @@ export const User = {
   },
   role: () => {
     const user = cookies.get('user');
-    console.log(user)
-    return user.role || 'customer';
+    return user ? user.role : null;
   }
 }

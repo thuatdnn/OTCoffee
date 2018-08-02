@@ -16,6 +16,7 @@ import './scss/style.css'
 // Containers
 import { DefaultLayout } from './containers';
 // Pages
+import CustomerAddOrder from './pages/Customer/AddTransaction';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Page404 from './pages/Page404';
@@ -28,11 +29,12 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
+          <Route exact path="/order" name="Order Page" component={CustomerAddOrder} />
           <Route exact path="/login" name="Login Page" component={Login} />
           <Route exact path="/register" name="Register Page" component={Register} />
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />
-          <Route path="/" name="Home" component={DefaultLayout} />
+          <Route path="/admin" name="Admin Page" component={DefaultLayout} />
         </Switch>
       </BrowserRouter>
     );

@@ -20,15 +20,12 @@ class Tables extends Component {
       error: null,
       tables: [],
       modalTable: false,
-      modalTable: false,
       currentTable: {},
       editingTable: initialTable,
-      userRole: User.role()
+      isAdmin: User.role() == "admin"
     };
     this.getTables = this.getTables.bind(this);
     this.toggleModalTable = this.toggleModalTable.bind(this);
-    this.toggleModalTable = this.toggleModalTable.bind(this);
-    this.handleSubmitTable = this.handleSubmitTable.bind(this);
     this.handleSubmitTable = this.handleSubmitTable.bind(this);
   }
 
@@ -58,23 +55,6 @@ class Tables extends Component {
     const { editingTable } = this.state;
     editingTable[field] = value;
     this.setState({ editingTable });
-  }
-
-  handleSubmitTable = async (e) => {
-    e.preventDefault();
-    try {
-      const { editingTable } = this.state;
-      let req = TableServices.addTable;
-      if (editingTable.id) {
-        req = TableServices.updateTable;
-      }
-      const table = await req(editingTable);
-      if(table) this.getTables();
-      this.setState({ submitingTable: false });
-      this.toggleModalTable();
-    } catch(error) {
-      this.setState({ error });
-    }
   }
 
   handleSubmitTable = async (e) => {
@@ -134,20 +114,20 @@ class Tables extends Component {
 
   render() {
     const {
-      tables, error, editingTable, userRole
+      tables, error, editingTable, isAdmin, loading
     } = this.state;
     return (
       <div className="animated fadeIn">
         <Row className="mb-3">
           <Col xs={12}>
-            <Button className="float-right" onClick={this.toggleModalTable}>
+            {isAdmin && <Button className="float-right" onClick={this.toggleModalTable}>
               Add Table
-            </Button>
+            </Button>}
           </Col>
         </Row>
         <Row>
           <Col xs={12}>
-            {error && <h6 className="text-center">An error occurred when loading this page</h6>}
+            {error && <h6 className="text-center">An error occurred</h6>}
             <Card className="animated fadeIn">
               <CardHeader>
                 <i className="fa fa-align-justify"></i> Tables
@@ -180,12 +160,12 @@ class Tables extends Component {
                           <Button className="btn-info text-white mr-1" size="sm" onClick={(e) => this.updateStatusTable(e, table)}>
                             {table.available ? "Mark serving" : "Mark empty"}
                           </Button>
-                          {userRole == "admin" && (
+                          {isAdmin && (
                             <Button className="btn-primary text-white mr-1" size="sm" onClick={(e) => this.toggleModalTable(e, table)}>
                               <i className="icons icon-pencil"/>
                             </Button>
                           )}
-                          {userRole == "admin" && (
+                          {isAdmin && (
                             <Button className="btn-danger" size="sm" onClick={(e) => this.handleDeleteTable(e, table)}>
                               <i className="icons icon-trash"/>
                             </Button>
@@ -193,7 +173,7 @@ class Tables extends Component {
                         </td>
                       </tr>
                     )}
-                    {tables.length === 0 && (
+                    {(!loading && tables.length === 0) && (
                       <tr>
                         <td className="text-center" colSpan={4}>
                           There is no data.

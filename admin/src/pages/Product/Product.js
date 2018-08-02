@@ -5,6 +5,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 import Swal from 'sweetalert2';
+import { User } from '../../utils/user';
 import * as ProductServices from '../../services/ProductServices.js';
 
 const initialCategory = {
@@ -29,6 +30,7 @@ class Product extends Component {
       currentCategory: {},
       editingCategory: initialCategory,
       editingProduct: initialProduct,
+      isAdmin: User.role() === "admin",
     };
     this.getCategories = this.getCategories.bind(this);
     this.toggleModalCategory = this.toggleModalCategory.bind(this);
@@ -177,30 +179,32 @@ class Product extends Component {
 
   render() {
     const {
-      categories, error, currentCategory, editingCategory, editingProduct,
+      categories, error, currentCategory, editingCategory, editingProduct, isAdmin,
     } = this.state;
     return (
       <div className="animated fadeIn">
         <Row className="mb-3">
           <Col xs={12}>
-            <Button className="float-right" onClick={this.toggleModalCategory}>
+            {isAdmin && <Button className="float-right" onClick={this.toggleModalCategory}>
               Add Category
-            </Button>
+            </Button>}
           </Col>
         </Row>
         <Row>
           <Col xs={12}>
-            {error && <h6 className="text-center">An error occurred when loading this page</h6>}
+            {error && <h6 className="text-center">An error occurred</h6>}
             {
               categories.map(category => (
                 <Card key={category.id} className="animated fadeIn">
                   <CardHeader>
                     <i className="fa fa-align-justify"></i> {category.name || 'N/A'}
-                    <div className="card-header-actions">
-                      <a href="#" className="card-header-action" onClick={(e) => this.toggleModalProduct(e, category)}>Add Product</a>{` | `}
-                      <a href="#" className="card-header-action" onClick={(e) => this.toggleModalCategory(e, category)}>Edit</a>{` | `}
-                      <a href="#" className="card-header-action" onClick={(e) => this.handleDeleteCategory(e, category)}>Delete</a>
-                    </div>
+                    {isAdmin && (
+                      <div className="card-header-actions">
+                        <a href="#" className="card-header-action" onClick={(e) => this.toggleModalProduct(e, category)}>Add Product</a>{` | `}
+                        <a href="#" className="card-header-action" onClick={(e) => this.toggleModalCategory(e, category)}>Edit</a>{` | `}
+                        <a href="#" className="card-header-action" onClick={(e) => this.handleDeleteCategory(e, category)}>Delete</a>
+                      </div>
+                    )}
                   </CardHeader>
                   <CardBody>
                     <Table responsive hover>
@@ -234,12 +238,16 @@ class Product extends Component {
                               <Button className="btn-info text-white mr-1" size="sm" onClick={(e) => this.updateStatusProduct(e, category, product)}>
                                 {product.available ? "Mark unavailable" : "Mark available"}
                               </Button>
-                              <Button className="btn-primary text-white mr-1" size="sm" onClick={(e) => this.toggleModalProduct(e, category, product)}>
-                                <i className="icons icon-pencil"/>
-                              </Button>
-                              <Button className="btn-danger" size="sm" onClick={(e) => this.handleDeleteProduct(e, category, product)}>
-                                <i className="icons icon-trash"/>
-                              </Button>
+                              {isAdmin && (
+                                <Button className="btn-primary text-white mr-1" size="sm" onClick={(e) => this.toggleModalProduct(e, category, product)}>
+                                  <i className="icons icon-pencil"/>
+                                </Button>
+                              )}
+                              {isAdmin && (
+                                <Button className="btn-danger" size="sm" onClick={(e) => this.handleDeleteProduct(e, category, product)}>
+                                  <i className="icons icon-trash"/>
+                                </Button>
+                              )}
                             </td>
                           </tr>
                         )}

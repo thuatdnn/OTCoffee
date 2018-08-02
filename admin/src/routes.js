@@ -27,29 +27,21 @@ const AddTransaction = Loadable({
   loader: () => import('./pages/AddTransaction'),
   loading: Loading,
 });
-
-const Users = Loadable({
-  loader: () => import('./views/Users/Users'),
+const Staff = Loadable({
+  loader: () => import('./pages/Staff'),
   loading: Loading,
 });
-
-const User = Loadable({
-  loader: () => import('./views/Users/User'),
-  loading: Loading,
-});
-
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: '/', exact: true, name: 'Home', component: DefaultLayout },
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/table', name: 'Table', component: Table },
-  { path: '/product', name: 'Product', component: Product },
-  { path: '/transaction', name: 'Transaction', component: Transaction },
-  { path: '/add-transaction', name: 'AddTransaction', component: AddTransaction },
-  { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/admin', exact: true, name: 'Home', component: DefaultLayout },
+  { path: '/admin/dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/admin/table', name: 'Table', component: Table },
+  { path: '/admin/product', name: 'Product', component: Product },
+  { path: '/admin/transaction', name: 'Transaction', component: Transaction },
+  { path: '/admin/add-transaction', name: 'Add Transaction', component: AddTransaction },
+  { path: '/admin/staff', name: 'Staff', component: Staff },
 ];
 
 export default routes;

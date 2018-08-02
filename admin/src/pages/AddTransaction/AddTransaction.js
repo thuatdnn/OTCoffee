@@ -108,7 +108,7 @@ class Transaction extends Component {
         </Row>
         <Row>
           <Col xs={12}>
-            {error && <h6 className="text-center">An error occurred when loading this page</h6>}
+            {error && <h6 className="text-center">An error occurred</h6>}
             
             {
               categories.map(category => (

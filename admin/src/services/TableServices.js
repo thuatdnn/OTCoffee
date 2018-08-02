@@ -14,8 +14,8 @@ export const getTables = async () => {
   return result;
 };
 
-export const updateTable = async (data) => {
-  const result = await Request.put(`${ENDPOINT_TABLES}/${data.id}`, data);
+export const updateTable = async (id, data) => {
+  const result = await Request.put(`${ENDPOINT_TABLES}/${id}`, data);
   return result;
 };
 

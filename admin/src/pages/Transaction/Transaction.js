@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Button, Card, CardBody, CardHeader, Col, Container, Form,
-  Input, FormGroup, Label, Row, FormFeedback,
-  Table, Modal, ModalHeader, ModalBody, ModalFooter,
+  Button, Card, CardBody, CardHeader, Col,
+  Row, Table, ListGroup, ListGroupItem, Badge
 } from 'reactstrap';
 import Swal from 'sweetalert2';
 import * as TransactionServices from '../../services/TransactionServices.js';
@@ -31,12 +30,14 @@ class Transaction extends Component {
       transactions: [],
       modalTransaction: false,
       editingTransaction: initialTransaction,
+      collapse: {},
     };
     this.getTransactions = this.getTransactions.bind(this);
   }
 
   getTransactions = async () => {
     try {
+      const { collapse } = this.state;
       const transactions = await TransactionServices.getTransactions();
       transactions.map(transaction => {
         const { orders } = transaction;
@@ -44,10 +45,11 @@ class Transaction extends Component {
         orders.map(order => {
           transaction.price += order.product.price * order.quantity;
         })
+        collapse[transaction.id] = true;
       })
-      this.setState({ transactions });
+      this.setState({ transactions, loading: false });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ error, loading: false });
     }
   }
 
@@ -96,23 +98,61 @@ class Transaction extends Component {
   renderButtonUpdateStatus(transaction) {
     switch(transaction.status) {
       case transactionStatus.pending:
-        return (
+        return [
           <Button className="btn-info text-white mr-1" size="sm" onClick={(e) => this.updateStatusTransaction(e, transaction, transactionStatus.processing)}>
             Accept
+          </Button>,
+          <Button className="btn-danger text-white mr-1" size="sm" onClick={(e) => this.updateStatusTransaction(e, transaction, transactionStatus.rejected)}>
+            Reject
           </Button>
-        )
+        ]
       case transactionStatus.processing:
         return (
           <Button className="btn-info text-white mr-1" size="sm" onClick={(e) => this.updateStatusTransaction(e, transaction, transactionStatus.done)}>
             Done
           </Button>
         )
+      default:
+        return (
+          <Button className="btn-danger" size="sm" onClick={(e) => this.handleDeleteTransaction(e, transaction)}>
+            <i className="icons icon-trash"/>
+          </Button>
+        )
     }
+  }
+
+  handleDeleteTransaction(e, transaction) {
+    e.preventDefault();
+    Swal({
+      title: 'Are you sure?',
+      text: `Did you want to remove transaction #${transaction.tranCode} ?`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+    }).then( async (result) => {
+      if (result.value) {
+        await TransactionServices.deleteTransaction(transaction);
+        this.getTransactions();
+        Swal(
+          'Done!',
+          'Your transaction has been removed.',
+          'success',
+        );
+      }
+    });
+  }
+
+  handleCollapse(e, id) {
+    console.log(e)
+    const { collapse } = this.state;
+    collapse[id] = !collapse[id];
+    this.setState({ collapse });
   }
 
   render() {
     const {
-      transactions, error, currentCategory, editingTransaction,
+      transactions, error, loading, collapse,
     } = this.state;
     return (
       <div className="animated fadeIn">
@@ -127,7 +167,7 @@ class Transaction extends Component {
         </Row>
         <Row>
           <Col xs={12}>
-            {error && <h6 className="text-center">An error occurred when loading this page</h6>}
+            {error && <h6 className="text-center">An error occurred</h6>}
             <Card className="animated fadeIn">
               <CardHeader>
                 <i className="fa fa-align-justify"></i> Transactions
@@ -138,15 +178,19 @@ class Transaction extends Component {
                     <tr>
                       <th scope="col"></th>
                       <th scope="col">Price</th>
+                      <th scope="col">Customer</th>
+                      <th scope="col">Staff</th>
                       <th scope="col">Status</th>
                       <th />
                     </tr>
                   </thead>
-                  <tbody>
-                    {transactions.map((transaction, index) =>
-                      <tr key={transaction.id}>
+                  {transactions.map((transaction, index) =>
+                    <tbody>
+                      <tr key={transaction.id} onClick={(e) => this.handleCollapse(e, transaction.id)}>
                         <td scope="col">#{transaction.tranCode || index}</td>
                         <td scope="col">{transaction.price}</td>
+                        <td scope="col">{transaction.customer ? transaction.customer.name : 'N/A'}</td>
+                        <td scope="col">{transaction.staff ? transaction.staff.name : 'N/A'}</td>
                         <td scope="col">
                           {this.renderStatus(transaction.status)}
                         </td>
@@ -155,20 +199,35 @@ class Transaction extends Component {
                           {/* <Button className="btn-primary text-white mr-1" size="sm" onClick={(e) => this.toggleModalTransaction(e, transaction)}>
                             <i className="icons icon-pencil"/>
                           </Button> */}
-                          {/* <Button className="btn-danger" size="sm" onClick={(e) => this.handleDeleteTransaction(e, transaction)}>
-                            <i className="icons icon-trash"/>
-                          </Button> */}
                         </td>
                       </tr>
-                    )}
-                    {transactions.length === 0 && (
+                      <tr>
+                        <td colSpan={5}>
+                          <h6>Order details:</h6>
+                        </td>
+                      </tr>
+                      {transaction.orders.map(item => (
+                        <tr>
+                          <td colSpan={5}>
+                            <div key={item.id} className="d-flex justify-content-between">
+                              <span>{item.product.name}</span>
+                              <span>{item.quantity} x {item.product.price}</span>
+                              <span>{item.quantity * item.product.price}</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  )}
+                  {(!loading && transactions.length === 0) && (
+                    <tbody>
                       <tr>
                         <td className="text-center" colSpan={6}>
                           There is no data.
                         </td>
                       </tr>
-                    )}
-                  </tbody>
+                    </tbody>
+                  )}
                 </Table>
               </CardBody>
             </Card>
