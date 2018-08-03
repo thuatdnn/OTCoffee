@@ -34,7 +34,7 @@ Toastr.options.progressBar = true;
 Toastr.options.positionClass = 'toast-top-right';
 
 const role = User.role();
-const user = User.getCurrent();
+const user = User.getCurrent() || {};
 const socket = io.connect('http://localhost:8800');
 
 socket.on('connect', async () => {
